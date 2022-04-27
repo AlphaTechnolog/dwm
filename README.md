@@ -16,6 +16,25 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 - dunst (for notifications)
 - picom (compositor)
 
+## About this
+
+### Dwm patches
+
+- underlinetag 
+- status2d
+- restartsig
+- rotatestack
+- fullgaps
+- bar-height
+- fixborders
+- noborder
+- notitle
+- pertag
+
+### St
+
+The st config is based in [siduck's st config](https://github.com/siduck/st)
+
 ## Installation
 
 > First make sure u have all the [requirements](#requirements) installed on ur system
