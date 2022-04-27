@@ -1,0 +1,17 @@
+--- dwm.c
++++ dwm.c
+@@ -1569,9 +1570,14 @@ setup(void)
+ 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
+ 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
+ 	/* init appearance */
++	if (LENGTH(tags) > LENGTH(tagsel))
++		die("too few color schemes for the tags");
+ 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+ 	for (i = 0; i < LENGTH(colors); i++)
+ 		scheme[i] = drw_scm_create(drw, colors[i], 3);
++	tagscheme = ecalloc(LENGTH(tagsel), sizeof(Clr *));
++	for (i = 0; i < LENGTH(tagsel); i++)
++		tagscheme[i] = drw_scm_create(drw, tagsel[i], 2);
+ 	/* init bars */
+ 	updatebars();
+ 	updatestatus();

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+cd $(dirname $0)
+
+export PATH="$PWD:$PATH"
+
+feh --bg-scale $PWD/../wallpapers/leafs.jpg
+picom -b
+widgets &
+dunst &
+
+cd $HOME
+
+if ! eww ping 2>&1 > /dev/null; then
+  eww daemon &
+fi
+
+exec dwm

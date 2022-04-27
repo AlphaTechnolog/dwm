@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=dwm
+Comment=Spawn dwm
+Exec=/home/gabriel/.config/dwm/scripts/start
+Type=Application

@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# colors
+fg=#D9D7D6
+bg=#061115
+contrast=#0A1419
+lighter=#162026
+
+black=#1C252C
+red=#DF5B61
+green=#78B892
+yellow=#De8F78
+blue=#6791C9
+magenta="#BC83E3"
+cyan="#67AFC1"
+white="#D9D7D6"
+
+# src
+percentage () {
+  local val=$(echo $1 | tr '%' ' ' | awk '{print $1}')
+  local icon1=$2
+  local icon2=$3
+  local icon3=$4
+  local icon4=$5
+  if [ "$val" -le 15 ]; then
+    echo $icon1
+  elif [ "$val" -le 30 ]; then
+    echo $icon2
+  elif [ "$val" -le 60 ]; then
+    echo $icon3
+  else
+    echo $icon4
+  fi
+}
+
+get_network_icon () {
+  [ $(cat /sys/class/net/w*/operstate) = down ] && echo   && exit
+  echo 
+}
+
+get_network () {
+  id=$(iwgetid -r || echo "Disconnected")
+  icon=$(get_network_icon)
+  if [[ $id == "Disconnected" ]]; then
+    printf "^b$red^^c$bg^ $icon ^b$lighter^^c$fg^ $id ^b$bg^"
+  else
+    printf "^b$blue^^c$bg^ $icon ^b$lighter^^c$fg^ $id ^b$bg^"
+  fi
+}
+
+get_volume_icon () {
+  local vol=$1
+  echo $(percentage "$vol" "" "" "墳" "")
+}
+
+get_volume () {
+  vol=$(amixer get Master |grep % |awk '{print $5}'|sed -e 's/\[//' -e 's/\]//' | head -n 1)
+  icon=$(get_volume_icon $vol)
+  vol=$(echo $vol | tr "%" " ")
+  vol=$(echo "${vol% }")
+  printf "^c$blue^$icon ^c$fg^$vol%%"
+}
+
+get_vpn () {
+  ip=$(ifconfig tun0 2>/dev/null | grep inet | head -n 1 | awk '{print $2}')
+  if [[ $ip == "" ]]; then
+    echo "^b$red^^c$bg^  ^b$lighter^^c$white^ Disconnected ^b$bg^^c$fg^"
+  else
+    echo "^b$green^^c$bg^  ^b$lighter^^c$white^ $ip ^b$bg^^c$fg^"
+  fi
+}
+
+get_date () {
+  printf "^c$blue^  ^c$fg^$(date +'%R') ^c$fg^^b$bg^"
+}
+
+get_ram () {
+  printf "^b$black^^c$yellow^  ^b$contrast^^c$fg^ %.0f%% ^b$bg^^c$fg^\n" $(free -m | grep Mem | awk '{print ($3/$2)*100}')
+}
+
+get_title () {
+  echo "$(get_ram)  $(get_volume)  $(get_vpn) $(get_date) $(get_network)"
+}
+
+while :; do
+  xsetroot -name " $(get_title) "
+  sleep 0.5
+done &
+
