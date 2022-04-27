@@ -77,4 +77,4 @@ sudo make clean install
 
 I hope u like this :3
 
-if yes, please give me an star
+if yes, please give me a star
