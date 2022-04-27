@@ -5,6 +5,8 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 ![demonstration-1](./misc/demonstration-1.png)
 ![demonstration-2](./misc/demonstration-2.png)
 
+[Enjoy notes](#enjoy)
+
 ## Requirements
 
 - JetBrainsMono Nerd Font (general font)
@@ -72,3 +74,7 @@ sudo make clean install
 ```
 
 ## Enjoy!
+
+I hope u like this :3
+
+if yes, please give me an star
