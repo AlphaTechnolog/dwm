@@ -1,17 +1,34 @@
---- dwm.c
-+++ dwm.c
-@@ -1569,9 +1570,14 @@ setup(void)
- 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
- 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
- 	/* init appearance */
-+	if (LENGTH(tags) > LENGTH(tagsel))
-+		die("too few color schemes for the tags");
- 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
- 	for (i = 0; i < LENGTH(colors); i++)
- 		scheme[i] = drw_scm_create(drw, colors[i], 3);
-+	tagscheme = ecalloc(LENGTH(tagsel), sizeof(Clr *));
-+	for (i = 0; i < LENGTH(tagsel); i++)
-+		tagscheme[i] = drw_scm_create(drw, tagsel[i], 2);
+--- dwm.c	2019-12-10 17:41:46.192676099 +1300
++++ dwm.c	2019-12-10 17:24:37.945708263 +1300
+@@ -705,7 +703,7 @@ drawbar(Monitor *m)
+ 	if (m == selmon) { /* status is only drawn on selected monitor */
+ 		drw_setscheme(drw, scheme[SchemeNorm]);
+ 		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+-		drw_text(drw, m->ww - sw - 2 * sp, 0, sw, bh, 0, stext, 0);
++		drw_text(drw, m->ww - sw, 0, sw, bh, 0, stext, 0);
+ 	}
+ 
+ 	for (c = m->clients; c; c = c->next) {
+@@ -731,12 +729,12 @@ drawbar(Monitor *m)
+ 	if ((w = m->ww - sw - x) > bh) {
+ 		if (m->sel) {
+ 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
+-			drw_text(drw, x, 0, w - 2 * sp, bh, lrpad / 2, m->sel->name, 0);
++			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+ 			if (m->sel->isfloating)
+ 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
+ 		} else {
+ 			drw_setscheme(drw, scheme[SchemeNorm]);
+-			drw_rect(drw, x, 0, w - 2 * sp, bh, 1, 1);
++			drw_rect(drw, x, 0, w, bh, 1, 1);
+ 		}
+ 	}
+ 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
+@@ -1573,7 +1568,6 @@ setup(void)
  	/* init bars */
  	updatebars();
  	updatestatus();
+-	updatebarpos(selmon);
+ 	/* supporting window for NetWMCheck */
+ 	wmcheckwin = XCreateSimpleWindow(dpy, root, 0, 0, 1, 1, 0, 0, 0);
+ 	XChangeProperty(dpy, wmcheckwin, netatom[NetWMCheck], XA_WINDOW, 32,

@@ -4,10 +4,13 @@ cd $(dirname $0)
 
 export PATH="$PWD:$PATH"
 
-feh --bg-scale $PWD/../wallpapers/leafs.jpg
-picom -b
-widgets &
-dunst &
+launch () {
+  ${@} &
+}
+
+feh --bg-scale $PWD/../wallpapers/everblush_creep.png
+pkill picom; picom -b
+pkill widgets; launch widgets
 
 cd $HOME
 

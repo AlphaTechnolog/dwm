@@ -2,8 +2,7 @@
 
 This is my custom dwm build which not uses dwmblocks or something similar for bar, i created a custom script approaching the status2d patch :3
 
-![demonstration-1](./misc/demonstration-1.png)
-![demonstration-2](./misc/demonstration-2.png)
+![demonstration](./misc/demonstration.png)
 
 [Enjoy notes](#enjoy)
 

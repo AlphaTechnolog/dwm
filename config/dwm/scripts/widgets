@@ -1,19 +1,19 @@
 #!/bin/bash
 
 # colors
-fg=#D9D7D6
-bg=#061115
-contrast=#0A1419
-lighter=#162026
+fg=#dadada
+bg=#181f21
+contrast=#22292b
+lighter=#22292b
 
-black=#1C252C
-red=#DF5B61
-green=#78B892
-yellow=#De8F78
-blue=#6791C9
-magenta="#BC83E3"
-cyan="#67AFC1"
-white="#D9D7D6"
+black=#22292b
+red=#e06e6e
+green=#8ccf7e
+yellow=#e5c76b
+blue=#67b0e8
+magenta="#c47fd5"
+cyan="#67cbe7"
+white="#b3b9b8"
 
 # src
 percentage () {
@@ -35,16 +35,16 @@ percentage () {
 
 get_network_icon () {
   [ $(cat /sys/class/net/w*/operstate) = down ] && echo   && exit
-  echo 
+  echo 
 }
 
 get_network () {
   id=$(iwgetid -r || echo "Disconnected")
   icon=$(get_network_icon)
   if [[ $id == "Disconnected" ]]; then
-    printf "^b$red^^c$bg^ $icon ^b$lighter^^c$fg^ $id ^b$bg^"
+    printf "^b$red^^c$bg^ $icon ^b$bg^^c$red^  $id  ^b$bg^"
   else
-    printf "^b$blue^^c$bg^ $icon ^b$lighter^^c$fg^ $id ^b$bg^"
+    printf "^b$blue^^c$bg^ $icon ^b$bg^^c$cyan^  $id  ^b$bg^"
   fi
 }
 
@@ -58,32 +58,38 @@ get_volume () {
   icon=$(get_volume_icon $vol)
   vol=$(echo $vol | tr "%" " ")
   vol=$(echo "${vol% }")
-  printf "^c$blue^$icon ^c$fg^$vol%%"
+  printf "^b$green^^c$bg^ $icon ^c$green^^b$bg^  $vol%%  "
 }
 
 get_vpn () {
   ip=$(ifconfig tun0 2>/dev/null | grep inet | head -n 1 | awk '{print $2}')
   if [[ $ip == "" ]]; then
-    echo "^b$red^^c$bg^  ^b$lighter^^c$white^ Disconnected ^b$bg^^c$fg^"
+    echo "^c$magenta^^b$lighter^  ^b$bg^^c$magenta^  Disconnected  ^b$bg^^c$fg^"
   else
-    echo "^b$green^^c$bg^  ^b$lighter^^c$white^ $ip ^b$bg^^c$fg^"
+    echo "^c$cyan^^b$lighter^  ^b$bg^^c$cyan^  $ip  ^b$bg^^c$fg^"
   fi
 }
 
 get_date () {
-  printf "^c$blue^  ^c$fg^$(date +'%R') ^c$fg^^b$bg^"
+  printf "^c$magenta^^b$lighter^  ^b$bg^  $(date +'%R')  ^c$fg^^b$bg^"
 }
 
 get_ram () {
-  printf "^b$black^^c$yellow^  ^b$contrast^^c$fg^ %.0f%% ^b$bg^^c$fg^\n" $(free -m | grep Mem | awk '{print ($3/$2)*100}')
+  printf "^b$lighter^^c$red^  ^b$bg^^c$red^  %.0f%%  ^b$bg^^c$fg^\n" $(free -m | grep Mem | awk '{print ($3/$2)*100}')
+}
+
+get_brightness () {
+  br=$(light -G | tr '.' ' ' | awk '{print $1}')
+  icon=$(percentage "$br" "" "" "" "")
+  printf "^b$yellow^^c$bg^ $icon ^b$bg^^c$yellow^  $br%%  ^c$fg^^b$bg^"
 }
 
 get_title () {
-  echo "$(get_ram)  $(get_volume)  $(get_vpn) $(get_date) $(get_network)"
+  echo "$(get_ram)$(get_brightness)$(get_volume)$(get_vpn)$(get_network)$(get_date)"
 }
 
 while :; do
-  xsetroot -name " $(get_title) "
+  xsetroot -name "$(get_title)"
   sleep 0.5
 done &
 
