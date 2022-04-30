@@ -14,10 +14,11 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 - rofi (for select apps)
 - dunst (for notifications)
 - picom (compositor)
-- light
-- exa
-- bat
+- light (for get brightness)
+- exa (ls replacement)
+- bat (cat replacement)
 - alsa-utils (for amixer)
+- wireless\_tools (iwgetid)
 
 ## About this
 
