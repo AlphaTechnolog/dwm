@@ -1,6 +1,6 @@
 .sys-tray-box {
     background-color: $bg;
-    border-radius: 6px;
+    // border-radius: 6px;
     padding: 2em;
 
     .first-row {
@@ -18,7 +18,7 @@
                 .ssid {
                     margin-left: -8px;
                     margin-bottom: 0.3em;
-                    font-size: 24px;
+                    font-size: 20px;
                     font-weight: bolder;
                 }
             }

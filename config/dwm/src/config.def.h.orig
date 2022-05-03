@@ -1,20 +1,25 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int gappx     = 12;        /* gaps between windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int scalepreview       = 4;        /* tag preview scaling */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int user_bh            = 26;
+static const int vertpad            = 8; /* vertical padding of bar */
+static const int sidepad            = 8; /* horizontal padding of bar */
+static const int user_bh            = 33;
+static const int horizpadbar        = 9;
+static const int vertpadbar         = 9;
 static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=9" };
 static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=9";
-static const char col_gray1[]       = "#0f0f17";
-static const char col_gray2[]       = "#13141c";
-static const char col_gray3[]       = "#646a73";
-static const char col_gray4[]       = "#13141c";
-static const char col_cyan[]        = "#a1bdce";
+static const char col_gray1[]       = "#061115";
+static const char col_gray2[]       = "#0A1419";
+static const char col_gray3[]       = "#484e5b";
+static const char col_gray4[]       = "#0A1419";
+static const char col_cyan[]        = "#6791c9";
+static const char col_borderbar[]   = "#061115";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -22,31 +27,29 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "亂", "", "", "", "ﭮ" };
+static const char *tags[] = { "", "亂", "", "", "", "ﭮ" };
 
-static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
+static const unsigned int ulinepad	= 4;	/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
 
 static const char *tagsel[][2] = {
-	{ "#e4c9af", "#13141c" },
-	{ "#afbea2", "#13141c" },
-	{ "#a1bdce", "#13141c" },
-	{ "#d7beda", "#13141c" },
-	{ "#d78787", "#13141c" },
-	{ "#b1e7dd", "#13141c" },
+	{ "#de8f78", "#061115" },
+	{ "#78b892", "#061115" },
+	{ "#6791c9", "#061115" },
+	{ "#bc83e3", "#061115" },
+	{ "#df5b61", "#061115" },
+	{ "#6791c9", "#061115" },
 };
 
 /* launcher commands (They must be NULL terminated) */
 static const char* apps[] = { "rofi", "-show", "drun", NULL };
-static const char* firefox[] = { "firefox", NULL };
-static const char* st[] = { "st", NULL };
+static const char* dashboard[] = { "eww", "open", "--toggle", "system-tray", NULL };
 
 static const Launcher launchers[] = {
-       /* command       name to display */
-  { firefox, "" },
-  { st, "" },
+  /* command       name to display */
+  { dashboard, "舘" },
 	{ apps, "異" },
 };
 
@@ -67,7 +70,6 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[M]",      monocle },
 	{ "[]=",      tile },
 };
 
@@ -89,6 +91,7 @@ static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[] = { "firefox", NULL };
 static const char *dashboardcmd[] = { "eww", "open", "--toggle", "system-tray", NULL };
+static const char *xcolorpick[] = { "/home/gabriel/.local/bin/xcolor-pick", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -96,6 +99,7 @@ static Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_Return, spawn,          {.v = dashboardcmd } },
 	{ MODKEY,                   		XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      spawn, 	       {.v = browsercmd } },
+  { MODKEY,                       XK_x,      spawn,          {.v = xcolorpick } },
 
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },

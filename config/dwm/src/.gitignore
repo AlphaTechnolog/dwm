@@ -1,0 +1,4 @@
+patches
+*.o
+*.rej
+*.orij

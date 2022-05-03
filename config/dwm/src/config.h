@@ -1,20 +1,25 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int gappx     = 12;        /* gaps between windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int scalepreview       = 4;        /* tag preview scaling */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int user_bh            = 26;
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=9" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=9";
-static const char col_gray1[]       = "#181f21";
-static const char col_gray2[]       = "#22292b";
-static const char col_gray3[]       = "#646a73";
-static const char col_gray4[]       = "#22292b";
-static const char col_cyan[]        = "#8ccf7e";
+static const int vertpad            = 9; /* vertical padding of bar */
+static const int sidepad            = 9; /* horizontal padding of bar */
+static const int user_bh            = 33;
+static const int horizpadbar        = 10;
+static const int vertpadbar         = 10;
+static const char *fonts[]          = { "Iosevka Nerd Font:size=9" };
+static const char dmenufont[]       = "Iosevka Nerd Font:size=9";
+static const char col_gray1[]       = "#171B20";
+static const char col_gray2[]       = "#1a1e24";
+static const char col_gray3[]       = "#485263";
+static const char col_gray4[]       = "#1a1e24";
+static const char col_cyan[]        = "#78DBA9";
+static const char col_borderbar[]   = "#171B20";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -22,20 +27,20 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "亂", "", "", "", "ﭮ" };
+static const char *tags[] = { "", "亂", "", "", "", "ﭮ" };
 
-static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
+static const unsigned int ulinepad	= 4;	/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
 
 static const char *tagsel[][2] = {
-	{ "#e5c76b", "#22292b" },
-	{ "#8ccf7e", "#22292b" },
-	{ "#67b0e8", "#22292b" },
-	{ "#c47fd5", "#22292b" },
-	{ "#e06e6e", "#22292b" },
-	{ "#6da4cd", "#22292b" },
+	{ "#f1cf8a", "#171B20" },
+	{ "#78DBA9", "#171B20" },
+	{ "#7ddac5", "#171B20" },
+	{ "#c68aee", "#171B20" },
+	{ "#e05f65", "#171B20" },
+	{ "#70a5eb", "#171B20" },
 };
 
 /* launcher commands (They must be NULL terminated) */
@@ -45,7 +50,7 @@ static const char* dashboard[] = { "eww", "open", "--toggle", "system-tray", NUL
 static const Launcher launchers[] = {
   /* command       name to display */
   { dashboard, "舘" },
-	{ apps, "異" },
+  { apps, "異" },
 };
 
 static const Rule rules[] = {
@@ -65,8 +70,8 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[M]",      monocle },
 	{ "[]=",      tile },
+  { "><>",      NULL },
 };
 
 /* key definitions */
@@ -84,7 +89,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
-static const char *termcmd[]  = { "tym", NULL };
+static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[] = { "firefox", NULL };
 static const char *dashboardcmd[] = { "eww", "open", "--toggle", "system-tray", NULL };
 static const char *xcolorpick[] = { "/home/gabriel/.local/bin/xcolor-pick", NULL };

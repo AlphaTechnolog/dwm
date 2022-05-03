@@ -10,6 +10,7 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 
 - JetBrainsMono Nerd Font (general font)
 - Iosevka Nerd Font (for dashboard with eww)
+- MaterialDesign Font (download from [this](https://github.com/Templarian/MaterialDesign-Font/))
 - eww (for dashboard)
 - rofi (for select apps)
 - dunst (for notifications)

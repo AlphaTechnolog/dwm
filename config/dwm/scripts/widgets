@@ -1,19 +1,19 @@
 #!/bin/bash
 
 # colors
-fg=#dadada
-bg=#181f21
-contrast=#22292b
-lighter=#22292b
+fg=#b6beca
+bg=#171B20
+contrast=#1a1e24
+lighter=#21262e
 
-black=#22292b
-red=#e06e6e
-green=#8ccf7e
-yellow=#e5c76b
-blue=#67b0e8
-magenta="#c47fd5"
-cyan="#67cbe7"
-white="#b3b9b8"
+black=#242931
+red=#e05f65
+green=#78DBA9
+yellow=#f1cf8a
+blue=#70a5eb
+magenta="#c68aee"
+cyan="#74bee9"
+white="#b6beca"
 
 # src
 percentage () {
@@ -85,7 +85,8 @@ get_brightness () {
 }
 
 get_title () {
-  echo "$(get_ram)$(get_brightness)$(get_volume)$(get_vpn)$(get_network)$(get_date)"
+  # using "  " to get more margin in the bar (problems at patch, and idk how to really fix it lmao)
+  echo "$(get_ram)$(get_brightness)$(get_volume)$(get_vpn)$(get_network)$(get_date) "
 }
 
 while :; do
