@@ -25,6 +25,12 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 
 ### Dwm patches
 
+- statuspadding + status2d fix patch (extracted from chadwm and really manually modified by me)
+- barpadding
+- dragmfact
+- launchers
+- rainbowtags
+- warp
 - underlinetag 
 - status2d
 - restartsig
@@ -32,7 +38,6 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 - fullgaps
 - bar-height
 - fixborders
-- noborder
 - notitle
 - pertag
 
