@@ -107,3 +107,5 @@ sudo make clean install
 I hope u like this :3
 
 if yes, please give me a star
+
+If u want to use neovim without terminal padding and at exit get back ur terminal padding, use `nv` in st terminal :3
