@@ -1,10 +1,6 @@
 # exit if not in interactive mode
 status -i || exit
 
-if test $TERM = 'linux'
-  startx
-end
-
 set fish_greeting ""
 
 alias ls='exa --icons'
@@ -12,7 +8,6 @@ alias la='exa --icons -la'
 alias tree='exa --icons --tree'
 alias cat='bat --theme base16 --paging=never --style=plain'
 alias g='copier -c github_token 2>&1 > /dev/null && git'
-alias nv='nvim'
 # alias clear='clear && ~/.config/color-scripts/launch.sh'
 
 # color
@@ -27,9 +22,6 @@ set fish_cursor_default block
 set fish_cursor_insert line
 set fish_cursor_replace_one underscore
 set fish_cursor_visual block
-
-# prompt
-# starship init fish | source
 
 # startup
 # ~/.config/color-scripts/launch.sh
@@ -62,3 +54,9 @@ fish_vi_key_bindings
 
 # blocks
 # launch_cs blocks
+
+export http_proxy=http://192.168.49.1:8282/
+export https_proxy=$http_proxy
+export ftp_proxy=$http_proxy
+export rsync_proxy=$http_proxy
+export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
