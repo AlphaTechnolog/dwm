@@ -58,6 +58,8 @@ cd dwm
 
 2. Then, copy the configs:
 
+**IF EXISTS SOME CONFIGURATION FILES IN ~/.config | ~/.local/bin | ~/ IT'LL BE REPLACED **
+
 ```sh
 cp -r ./config/* ~/.config
 cp -r ./bin/* ~/.local/bin
