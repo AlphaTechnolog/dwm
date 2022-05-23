@@ -1,34 +1,86 @@
---- dwm.c	2019-12-10 17:24:37.945708263 +1300
-+++ dwm.c	2019-12-10 17:41:46.192676099 +1300
-@@ -707,7 +709,7 @@ drawbar(Monitor *m)
- 	if (m == selmon) { /* status is only drawn on selected monitor */
- 		drw_setscheme(drw, scheme[SchemeNorm]);
- 		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
--		drw_text(drw, m->ww - sw, 0, sw, bh, 0, stext, 0);
-+		drw_text(drw, m->ww - sw - 2 * sp, 0, sw, bh, 0, stext, 0);
+--- dwm.c
++++ dwm.c
+@@ -85,7 +85,14 @@ enum { SchemeNorm, SchemeSel, SchemeDarker,
+        SchemeBlack, SchemeWhite, 
+        SchemeBrRed, SchemeBrGreen, SchemeBrBlue,
+        SchemeBrCyan, SchemeBrMagenta, SchemeBrYellow, 
+-       SchemeBrBlack, SchemeBrWhite, SchemeFloat }; /* color schemes */
++       SchemeBrBlack, SchemeBrWhite, SchemeFloat,
++       SchemeTag, SchemeTag1, SchemeTag2, SchemeTag3, 
++       SchemeTag4, SchemeTag5, SchemeTag6, SchemeTag7, 
++       SchemeTag8, SchemeTag9, SchemeLayout, 
++       SchemeTitle, SchemeTitleFloat,
++       SchemeTitle1, SchemeTitle2, SchemeTitle3, 
++       SchemeTitle4, SchemeTitle5, SchemeTitle6, 
++       SchemeTitle7, SchemeTitle8, SchemeTitle9 }; /* color schemes */
+ enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
+        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
+        NetWMWindowTypeDialog, NetClientList, NetDesktopNames, 
+@@ -162,6 +169,8 @@ struct Monitor {
+ 	unsigned int sellt;
+ 	unsigned int tagset[2];
+ 	unsigned int alttag;
++	unsigned int colorfultitle;
++	unsigned int colorfultag;
+         unsigned int showvacanttags;
+ 	int showbar;
+ 	int topbar;
+@@ -1043,6 +1054,8 @@ createmon(void)
+ 	m->gappov = gappov;
+ 	m->showbar = showbar;
+ 	m->topbar = topbar;
++        m->colorfultag = colorfultag ? colorfultag : 0;
++        m->colorfultitle = colorfultitle ? colorfultitle : 0;
+         m->showvacanttags = showvacanttags ? showvacanttags : 0;
+ 	m->lt[0] = &layouts[taglayouts[1] % LENGTH(layouts)];
+ 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
+@@ -1200,7 +1213,18 @@ drawbar(Monitor *m)
+ 		wdelta = selmon->alttag
+                                 ? (TEXTW(tagsalt[i]) - TEXTW(tags[i])) / 2
+                                 : 0;
+-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
++                if (selmon->colorfultag)
++                        drw_setscheme(
++                                drw,
++                                scheme[m->tagset[m->seltags] & 1 << i
++                                        ? tagschemes[i] : SchemeTag]
++                        );
++                else
++                        drw_setscheme(
++                                drw,
++                                scheme[m->tagset[m->seltags] & 1 << i
++                                ? SchemeSel : SchemeTag]
++                        );
+ 		drw_text(
+                         drw, x, 0,
+                         w, bh, wdelta + lrpad / 2,
+@@ -1230,7 +1254,7 @@ drawbar(Monitor *m)
+ 		x += w;
  	}
+ 	w = TEXTW(m->ltsymbol);
+-	drw_setscheme(drw, scheme[SchemeNorm]);
++	drw_setscheme(drw, scheme[SchemeLayout]);
+ 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
  
- 	for (c = m->clients; c; c = c->next) {
-@@ -733,12 +735,12 @@ drawbar(Monitor *m)
- 	if ((w = m->ww - sw - x) > bh) {
+         if (m == selmon) {
+@@ -1241,7 +1265,19 @@ drawbar(Monitor *m)
+         }
+ 	if (w > bh) {
  		if (m->sel) {
- 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
--			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
-+			drw_text(drw, x, 0, w - 2 * sp, bh, lrpad / 2, m->sel->name, 0);
- 			if (m->sel->isfloating)
- 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
- 		} else {
- 			drw_setscheme(drw, scheme[SchemeNorm]);
--			drw_rect(drw, x, 0, w, bh, 1, 1);
-+			drw_rect(drw, x, 0, w - 2 * sp, bh, 1, 1);
- 		}
- 	}
- 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
-@@ -1578,6 +1583,7 @@ setup(void)
- 	/* init bars */
- 	updatebars();
- 	updatestatus();
-+	updatebarpos(selmon);
- 	/* supporting window for NetWMCheck */
- 	wmcheckwin = XCreateSimpleWindow(dpy, root, 0, 0, 1, 1, 0, 0, 0);
- 	XChangeProperty(dpy, wmcheckwin, netatom[NetWMCheck], XA_WINDOW, 32,
+-			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
++                        if (selmon->colorfultitle) {
++                                for (i = 0; i < LENGTH(tags); i++)
++                                        if (selmon->sel->tags & 1 << i)
++                                                drw_setscheme(
++                                                        drw,
++                                                        scheme[titleschemes[i]]
++                                                );
++                        } else {
++                                int s = (m == selmon) && m->sel->isfloating
++                                                ? SchemeTitleFloat
++                                                : SchemeTitle;
++                                drw_setscheme(drw, scheme[s]);
++                        }
+ 			drw_text(
+                                 drw,
+                                 x, 0,

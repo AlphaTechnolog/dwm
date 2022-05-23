@@ -1,26 +1,254 @@
 --- config.def.h
 +++ config.def.h
-@@ -36,14 +36,11 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95]
- static const int nmaster     = 1;    /* number of clients in master area */
- static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
- 
--#include "fibonacci.c"
- static const Layout layouts[] = {
- 	/* symbol     arrange function */
- 	{ "[]=",      tile },    /* first entry is default */
- 	{ "><>",      NULL },    /* no layout function means floating behavior */
- 	{ "[M]",      monocle },
-- 	{ "[@]",      spiral },
-- 	{ "[\\]",      dwindle },
+@@ -12,6 +12,8 @@ static       int smartgaps          = 0;        /* 1 means no outer gap when the
+ /* bar */
+ static const unsigned int barheight      = 29; /* 0 means default height*/
+ static const unsigned int showvacanttags = 0;  /* 0 mean hide vacant tags */
++static const unsigned int colorfultitle  = 1;  /* 0 means title use SchemeTitle and SchemeTitleFloat */
++static const unsigned int colorfultag    = 1;  /* 0 means use SchemeSel for selected tag */
+ static const int vertpad                 = 8;  /* vertical padding of bar */
+ static const int sidepad                 = 8;  /* horizontal padding of bar */
+ static const int showbar                 = 1;  /* 0 means no bar */
+@@ -59,6 +61,28 @@ static const char *colors[][3]      = {
+         [SchemeBrYellow]   = { col_br_yellow,   col_bg,    col_black },   /* \x1b */
+         [SchemeBrBlack]    = { col_br_black,    col_bg,    col_black },   /* \x1c */
+         [SchemeBrWhite]    = { col_br_white,    col_bg,    col_black },   /* \x1d */
++        [SchemeTag]        = { col_br_black,    col_bg,    col_black },
++        [SchemeTag1]       = { col_fg,          col_dark,  col_black },
++	[SchemeTag2]       = { col_red,         col_dark,  col_black },
++        [SchemeTag3]       = { col_br_yellow,   col_dark,  col_black },
++        [SchemeTag4]       = { col_br_blue,     col_dark,  col_black },
++        [SchemeTag5]       = { col_br_magenta,  col_dark,  col_black },
++	[SchemeTag6]       = { col_br_cyan,     col_dark,  col_black },
++	[SchemeTag7]       = { col_br_green,    col_dark,  col_black },
++	[SchemeTag8]       = { col_yellow,      col_dark,  col_black },
++	[SchemeTag9]       = { col_br_red,      col_dark,  col_black },
++	[SchemeLayout]     = { col_white,       col_bg,    col_black },
++	[SchemeTitle]      = { col_fg,          col_bg,    col_black },
++	[SchemeTitleFloat] = { col_br_blue,     col_bg,    col_black },
++	[SchemeTitle1]     = { col_fg,          col_bg,    col_black },
++	[SchemeTitle2]     = { col_red,         col_bg,    col_black },
++        [SchemeTitle3]     = { col_br_yellow,   col_bg,    col_black },
++        [SchemeTitle4]     = { col_br_blue,     col_bg,    col_black },
++        [SchemeTitle5]     = { col_br_magenta,  col_bg,    col_black },
++	[SchemeTitle6]     = { col_br_cyan,     col_bg,    col_black },
++	[SchemeTitle7]     = { col_br_green,    col_bg,    col_black },
++	[SchemeTitle8]     = { col_yellow,      col_bg,    col_black },
++	[SchemeTitle9]     = { col_br_red,      col_bg,    col_black },
+         [SchemeFloat]      = { col_fg,          col_bg,    col_blue },
  };
  
- /* key definitions */
-@@ -79,8 +76,6 @@ static Key keys[] = {
- 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
- 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
- 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
--	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[3]} },
--	{ MODKEY|ShiftMask,             XK_r,      setlayout,      {.v = &layouts[4]} },
- 	{ MODKEY,                       XK_space,  setlayout,      {0} },
- 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
- 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+@@ -72,6 +96,12 @@ static const char *tagsalt[] = {
+                                 " 6 ", " 7 ", " 8 ", " 9 "
+ };
+ 
++static const int tagschemes[] = { SchemeTag1, SchemeTag2, SchemeTag3,
++                                  SchemeTag4, SchemeTag5, SchemeTag6,
++                                  SchemeTag7, SchemeTag8, SchemeTag9 };
++static const int titleschemes[] = { SchemeTitle1, SchemeTitle2, SchemeTitle3,
++                                    SchemeTitle4, SchemeTitle5, SchemeTitle6,
++                                    SchemeTitle7, SchemeTitle8, SchemeTitle9 };
+ static const int swallowfloating    = 0; /* 1 means swallow floating windows by default */
+ static int floatposgrid_x           = 5; /* float grid columns */
+ static int floatposgrid_y           = 5; /* float grid rows */
+@@ -153,105 +183,107 @@ static const char *dmenucmd[] = {
+ static const char *termcmd[]  = { "alacritty", NULL };
+ 
+ static Key keys[] = {
+-	/* modifier           key              function        argument */
+-	{ ALT,                XK_space,        spawn,          {.v = dmenucmd } },
+-	{ MOD,                XK_space,        spawn,          {.v = termcmd } },
+-	{ MOD,                XK_b,            togglebar,      {0} },
+-	{ MOD,                XK_Return,       focusmaster,    {0} },
+-	{ MOD,                XK_j,            focusstack,     {.i = +1 } },
+-	{ MOD,                XK_k,            focusstack,     {.i = -1 } },
+-	{ MOD,                XK_i,            incnmaster,     {.i = +1 } },
+-	{ MOD,                XK_d,            incnmaster,     {.i = -1 } },
+-	{ MOD|CTRL,           XK_j,            inplacerotate,  {.i = +1} },
+-	{ MOD|CTRL,           XK_k,            inplacerotate,  {.i = -1} },
+-	{ MOD|CTRL,           XK_h,            inplacerotate,  {.i = +2} },
+-	{ MOD|CTRL,           XK_l,            inplacerotate,  {.i = -2} },
+-	{ MOD,                XK_h,            setmfact,       {.f = -0.01} },
+-	{ MOD,                XK_l,            setmfact,       {.f = +0.01} },
+-	{ MOD,                XK_o,            setmfact,       {.f = mfact} },
+-	{ MOD|SHIFT,          XK_h,            setcfact,       {.f = -0.05} },
+-	{ MOD|SHIFT,          XK_l,            setcfact,       {.f = +0.05} },
+-	{ MOD|SHIFT,          XK_o,            setcfact,       {.f =  0.00} },
+-	{ MOD|CTRL,           XK_o,            setcfact,       {.f =  1.00} },
+-	{ MOD|CTRL|SHIFT,     XK_o,            resetfact,      {0} },
+-        { MOD|ALT,            XK_0,            togglegaps,     {0} },
+-        { MOD|SHIFT,          XK_equal,        defaultgaps,    {0} },
+-	{ MOD,                XK_equal,        incrgaps,       {.i = +1 } },
+-	{ MOD,                XK_minus,        incrgaps,       {.i = -1 } },
+-	{ MOD|ALT,            XK_i,            incrigaps,      {.i = +1 } },
+-	{ MOD|ALT|SHIFT,      XK_i,            incrigaps,      {.i = -1 } },
+-	{ MOD|ALT,            XK_o,            incrogaps,      {.i = +1 } },
+-	{ MOD|ALT|SHIFT,      XK_o,            incrogaps,      {.i = -1 } },
+-	{ MOD|ALT,            XK_x,            incrihgaps,     {.i = +1 } },
+-	{ MOD|ALT|SHIFT,      XK_x,            incrihgaps,     {.i = -1 } },
+-	{ MOD|ALT,            XK_y,            incrivgaps,     {.i = +1 } },
+-	{ MOD|ALT|SHIFT,      XK_y,            incrivgaps,     {.i = -1 } },
+-	{ MOD|CTRL,           XK_x,            incrohgaps,     {.i = +1 } },
+-	{ MOD|CTRL|SHIFT,     XK_x,            incrohgaps,     {.i = -1 } },
+-	{ MOD|CTRL,           XK_y,            incrovgaps,     {.i = +1 } },
+-	{ MOD|CTRL|SHIFT,     XK_y,            incrovgaps,     {.i = -1 } },
+-	{ MOD|SHIFT,          XK_Return,       zoom,           {0} },
+-	{ MOD,                XK_Tab,          view,           {0} },
+-	{ MOD|SHIFT,          XK_c,            killclient,     {0} },
+-	{ MOD|CTRL,           XK_comma,        cyclelayout,    {.i = -1 } },
+-	{ MOD|CTRL,           XK_period,       cyclelayout,    {.i = +1 } },
+-        { MOD,                XK_t,            setlayout,      {.v = &layouts[0]} }, /* tile */
+-        { MOD,                XK_f,            setlayout,      {.v = &layouts[1]} }, /* float */
+-        { MOD,                XK_m,            setlayout,      {.v = &layouts[2]} }, /* monocle */
+-        { MOD|ALT,            XK_t,            setlayout,      {.v = &layouts[3]} }, /* dwindle */
+-        { MOD,                XK_g,            setlayout,      {.v = &layouts[4]} }, /* gaplessgrid */
+-        { MOD|ALT,            XK_g,            setlayout,      {.v = &layouts[5]} }, /* horizgrid */
+-        { MOD|ALT,            XK_b,            setlayout,      {.v = &layouts[6]} }, /* bstack */
+-	{ MOD|CTRL,           XK_c,            setlayout,      {.v = &layouts[7]} }, /* centeredmaster */
+-	{ MOD|ALT,            XK_c,            setlayout,      {.v = &layouts[8]} }, /* centeredfloatingmaster */
+-	{ MOD|CTRL,           XK_space,        setlayout,      {0} },
+-	{ MOD|SHIFT,          XK_space,        togglefloating, {.v = " 50%  50%"} },
+-	{ MOD,                XK_0,            view,           {.ui = ~0 } },
+-	{ MOD|SHIFT,          XK_0,            tag,            {.ui = ~0 } },
+-	{ MOD,                XK_n,            togglealttag,   {0} },
+-	{ MOD|ALT|SHIFT,      XK_n,            togglevacanttag,{0} },
+-	{ ALT|SHIFT,          XK_bracketright, shiftview,      {.i = +1  } },
+-	{ ALT|SHIFT,          XK_bracketleft,  shiftview,      {.i = -1  } },
+-	{ MOD|SHIFT,          XK_bracketright, shiftclient,    {.i = +1  } },
+-	{ MOD|SHIFT,          XK_bracketleft,  shiftclient,    {.i = -1  } },
+-	{ MOD,                XK_comma,        focusmon,       {.i = -1 } },
+-	{ MOD,                XK_period,       focusmon,       {.i = +1 } },
+-	{ MOD|SHIFT,          XK_comma,        tagmon,         {.i = -1 } },
+-	{ MOD|SHIFT,          XK_period,       tagmon,         {.i = +1 } },
++	/* modifier           key              function             argument */
++	{ ALT,                XK_space,        spawn,               {.v = dmenucmd } },
++	{ MOD,                XK_space,        spawn,               {.v = termcmd } },
++	{ MOD,                XK_b,            togglebar,           {0} },
++	{ MOD,                XK_Return,       focusmaster,         {0} },
++	{ MOD,                XK_j,            focusstack,          {.i = +1 } },
++	{ MOD,                XK_k,            focusstack,          {.i = -1 } },
++	{ MOD,                XK_i,            incnmaster,          {.i = +1 } },
++	{ MOD,                XK_d,            incnmaster,          {.i = -1 } },
++	{ MOD|CTRL,           XK_j,            inplacerotate,       {.i = +1} },
++	{ MOD|CTRL,           XK_k,            inplacerotate,       {.i = -1} },
++	{ MOD|CTRL,           XK_h,            inplacerotate,       {.i = +2} },
++	{ MOD|CTRL,           XK_l,            inplacerotate,       {.i = -2} },
++	{ MOD,                XK_h,            setmfact,            {.f = -0.01} },
++	{ MOD,                XK_l,            setmfact,            {.f = +0.01} },
++	{ MOD,                XK_o,            setmfact,            {.f = mfact} },
++	{ MOD|SHIFT,          XK_h,            setcfact,            {.f = -0.05} },
++	{ MOD|SHIFT,          XK_l,            setcfact,            {.f = +0.05} },
++	{ MOD|SHIFT,          XK_o,            setcfact,            {.f =  0.00} },
++	{ MOD|CTRL,           XK_o,            setcfact,            {.f =  1.00} },
++	{ MOD|CTRL|SHIFT,     XK_o,            resetfact,           {0} },
++        { MOD|ALT,            XK_0,            togglegaps,          {0} },
++        { MOD|SHIFT,          XK_equal,        defaultgaps,         {0} },
++	{ MOD,                XK_equal,        incrgaps,            {.i = +1 } },
++	{ MOD,                XK_minus,        incrgaps,            {.i = -1 } },
++	{ MOD|ALT,            XK_i,            incrigaps,           {.i = +1 } },
++	{ MOD|ALT|SHIFT,      XK_i,            incrigaps,           {.i = -1 } },
++	{ MOD|ALT,            XK_o,            incrogaps,           {.i = +1 } },
++	{ MOD|ALT|SHIFT,      XK_o,            incrogaps,           {.i = -1 } },
++	{ MOD|ALT,            XK_x,            incrihgaps,          {.i = +1 } },
++	{ MOD|ALT|SHIFT,      XK_x,            incrihgaps,          {.i = -1 } },
++	{ MOD|ALT,            XK_y,            incrivgaps,          {.i = +1 } },
++	{ MOD|ALT|SHIFT,      XK_y,            incrivgaps,          {.i = -1 } },
++	{ MOD|CTRL,           XK_x,            incrohgaps,          {.i = +1 } },
++	{ MOD|CTRL|SHIFT,     XK_x,            incrohgaps,          {.i = -1 } },
++	{ MOD|CTRL,           XK_y,            incrovgaps,          {.i = +1 } },
++	{ MOD|CTRL|SHIFT,     XK_y,            incrovgaps,          {.i = -1 } },
++	{ MOD|SHIFT,          XK_Return,       zoom,                {0} },
++	{ MOD,                XK_Tab,          view,                {0} },
++	{ MOD|SHIFT,          XK_c,            killclient,          {0} },
++	{ MOD|CTRL,           XK_comma,        cyclelayout,         {.i = -1 } },
++	{ MOD|CTRL,           XK_period,       cyclelayout,         {.i = +1 } },
++        { MOD,                XK_t,            setlayout,           {.v = &layouts[0]} }, /* tile */
++        { MOD,                XK_f,            setlayout,           {.v = &layouts[1]} }, /* float */
++        { MOD,                XK_m,            setlayout,           {.v = &layouts[2]} }, /* monocle */
++        { MOD|ALT,            XK_t,            setlayout,           {.v = &layouts[3]} }, /* dwindle */
++        { MOD,                XK_g,            setlayout,           {.v = &layouts[4]} }, /* gaplessgrid */
++        { MOD|ALT,            XK_g,            setlayout,           {.v = &layouts[5]} }, /* horizgrid */
++        { MOD|ALT,            XK_b,            setlayout,           {.v = &layouts[6]} }, /* bstack */
++	{ MOD|CTRL,           XK_c,            setlayout,           {.v = &layouts[7]} }, /* centeredmaster */
++	{ MOD|ALT,            XK_c,            setlayout,           {.v = &layouts[8]} }, /* centeredfloatingmaster */
++	{ MOD|CTRL,           XK_space,        setlayout,           {0} },
++	{ MOD|SHIFT,          XK_space,        togglefloating,      {.v = " 50%  50%"} },
++	{ MOD,                XK_0,            view,                {.ui = ~0 } },
++	{ MOD|SHIFT,          XK_0,            tag,                 {.ui = ~0 } },
++	{ MOD,                XK_n,            togglealttag,        {0} },
++	{ MOD|SHIFT,          XK_n,            togglecolorfultag,   {0} },
++	{ MOD|CTRL,           XK_n,            togglecolorfultitle, {0} },
++	{ MOD|ALT|SHIFT,      XK_n,            togglevacanttag,     {0} },
++	{ ALT|SHIFT,          XK_bracketright, shiftview,           {.i = +1  } },
++	{ ALT|SHIFT,          XK_bracketleft,  shiftview,           {.i = -1  } },
++	{ MOD|SHIFT,          XK_bracketright, shiftclient,         {.i = +1  } },
++	{ MOD|SHIFT,          XK_bracketleft,  shiftclient,         {.i = -1  } },
++	{ MOD,                XK_comma,        focusmon,            {.i = -1 } },
++	{ MOD,                XK_period,       focusmon,            {.i = +1 } },
++	{ MOD|SHIFT,          XK_comma,        tagmon,              {.i = -1 } },
++	{ MOD|SHIFT,          XK_period,       tagmon,              {.i = +1 } },
+ 	/* Client position is limited to monitor window area */
+-	{ SHIFT|ALT,          XK_k,            floatpos,       {.v = " 0x -8y"} }, // ↑
+-	{ SHIFT|ALT,          XK_h,            floatpos,       {.v = "-8x  0y"} }, // ←
+-	{ SHIFT|ALT,          XK_l,            floatpos,       {.v = " 8x  0y"} }, // →
+-	{ SHIFT|ALT,          XK_j,            floatpos,       {.v = " 0x  8y"} }, // ↓
++	{ SHIFT|ALT,          XK_k,            floatpos,            {.v = " 0x -8y"} }, // ↑
++	{ SHIFT|ALT,          XK_h,            floatpos,            {.v = "-8x  0y"} }, // ←
++	{ SHIFT|ALT,          XK_l,            floatpos,            {.v = " 8x  0y"} }, // →
++	{ SHIFT|ALT,          XK_j,            floatpos,            {.v = " 0x  8y"} }, // ↓
+ 	/* Absolute positioning (allows moving windows between monitors) */
+-	{ MOD|SHIFT|ALT,      XK_k,            floatpos,       {.v = " 0a -8a"} }, // ↑
+-	{ MOD|SHIFT|ALT,      XK_h,            floatpos,       {.v = "-8a  0a"} }, // ←
+-	{ MOD|SHIFT|ALT,      XK_l,            floatpos,       {.v = " 8a  0a"} }, // →
+-	{ MOD|SHIFT|ALT,      XK_j,            floatpos,       {.v = " 0a  8a"} }, // ↓
++	{ MOD|SHIFT|ALT,      XK_k,            floatpos,            {.v = " 0a -8a"} }, // ↑
++	{ MOD|SHIFT|ALT,      XK_h,            floatpos,            {.v = "-8a  0a"} }, // ←
++	{ MOD|SHIFT|ALT,      XK_l,            floatpos,            {.v = " 8a  0a"} }, // →
++	{ MOD|SHIFT|ALT,      XK_j,            floatpos,            {.v = " 0a  8a"} }, // ↓
+ 	/* Client is positioned in the edge or in the middle of the screen. */
+-        { MOD|ALT,            XK_k,            floatpos,       {.v = "  0x   0%"} }, // ↑
+-        { MOD|ALT,            XK_h,            floatpos,       {.v = "  0%   0y"} }, // ←
+-        { MOD,                XK_c,            floatpos,       {.v = " 50%  50%"} }, // ·
+-        { MOD|ALT,            XK_l,            floatpos,       {.v = "100%   0y"} }, // →
+-        { MOD|ALT,            XK_j,            floatpos,       {.v = "  0x 100%"} }, // ↓
++        { MOD|ALT,            XK_k,            floatpos,            {.v = "  0x   0%"} }, // ↑
++        { MOD|ALT,            XK_h,            floatpos,            {.v = "  0%   0y"} }, // ←
++        { MOD,                XK_c,            floatpos,            {.v = " 50%  50%"} }, // ·
++        { MOD|ALT,            XK_l,            floatpos,            {.v = "100%   0y"} }, // →
++        { MOD|ALT,            XK_j,            floatpos,            {.v = "  0x 100%"} }, // ↓
+ 	/* Resize, increase client size from every side*/
+-	{ CTRL|ALT,          XK_k,             floatpos,       {.v = "-1Z -1Z  0w  8h"} }, // ↑
+-	{ CTRL|ALT,          XK_h,             floatpos,       {.v = "-1Z -1Z  8w  0h"} }, // ←
+-        { CTRL|ALT|SHIFT,    XK_k,             floatpos,       {.v = " 8w  8h"} }, // ·
+-        { CTRL|ALT,          XK_l,             floatpos,       {.v = "-1S -1S  8w  0h"} }, // →
+-	{ CTRL|ALT,          XK_j,             floatpos,       {.v = "-1S -1S  0w  8h"} }, // ↓
++	{ CTRL|ALT,          XK_k,             floatpos,            {.v = "-1Z -1Z  0w  8h"} }, // ↑
++	{ CTRL|ALT,          XK_h,             floatpos,            {.v = "-1Z -1Z  8w  0h"} }, // ←
++        { CTRL|ALT|SHIFT,    XK_k,             floatpos,            {.v = " 8w  8h"} }, // ·
++        { CTRL|ALT,          XK_l,             floatpos,            {.v = "-1S -1S  8w  0h"} }, // →
++	{ CTRL|ALT,          XK_j,             floatpos,            {.v = "-1S -1S  0w  8h"} }, // ↓
+ 	/* Resize, decrease client size from every side*/
+-	{ MOD|CTRL|ALT,      XK_j,             floatpos,       {.v = "-1Z -1Z  0w -8h"} }, // ↑
+-	{ MOD|CTRL|ALT,      XK_l,             floatpos,       {.v = "-1Z -1Z -8w  0h"} }, // ←
+-        { CTRL|ALT|SHIFT,    XK_j,             floatpos,       {.v = "-8w -8h"} }, // ·
+-        { MOD|CTRL|ALT,      XK_h,             floatpos,       {.v = "-1S -1S -8w  0h"} }, // →
+-	{ MOD|CTRL|ALT,      XK_k,             floatpos,       {.v = "-1S -1S  0w -8h"} }, // ↓
++	{ MOD|CTRL|ALT,      XK_j,             floatpos,            {.v = "-1Z -1Z  0w -8h"} }, // ↑
++	{ MOD|CTRL|ALT,      XK_l,             floatpos,            {.v = "-1Z -1Z -8w  0h"} }, // ←
++        { CTRL|ALT|SHIFT,    XK_j,             floatpos,            {.v = "-8w -8h"} }, // ·
++        { MOD|CTRL|ALT,      XK_h,             floatpos,            {.v = "-1S -1S -8w  0h"} }, // →
++	{ MOD|CTRL|ALT,      XK_k,             floatpos,            {.v = "-1S -1S  0w -8h"} }, // ↓
+         /* Maximize the client in any given direction */
+-        { CTRL|SHIFT,        XK_k,             floatpos,       {.v = " 0x  0Z   0%   0%"} }, // ↑
+-        { CTRL|SHIFT,        XK_h,             floatpos,       {.v = " 0Z  0y   0%   0%"} }, // ←
+-        { MOD|CTRL|SHIFT,    XK_c,             floatpos,       {.v = "50% 50%  80%  80%"} }, // ·
+-        { CTRL|SHIFT,        XK_l,             floatpos,       {.v = "-1S  0y 100%   0%"} }, // →
+-        { CTRL|SHIFT,        XK_j,             floatpos,       {.v = " 0x -1S   0% 100%"} }, // ↓
++        { CTRL|SHIFT,        XK_k,             floatpos,            {.v = " 0x  0Z   0%   0%"} }, // ↑
++        { CTRL|SHIFT,        XK_h,             floatpos,            {.v = " 0Z  0y   0%   0%"} }, // ←
++        { MOD|CTRL|SHIFT,    XK_c,             floatpos,            {.v = "50% 50%  80%  80%"} }, // ·
++        { CTRL|SHIFT,        XK_l,             floatpos,            {.v = "-1S  0y 100%   0%"} }, // →
++        { CTRL|SHIFT,        XK_j,             floatpos,            {.v = " 0x -1S   0% 100%"} }, // ↓
+ 	TAGKEYS(                        XK_1,                      0)
+ 	TAGKEYS(                        XK_2,                      1)
+ 	TAGKEYS(                        XK_3,                      2)

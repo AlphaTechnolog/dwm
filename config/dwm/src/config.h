@@ -1,30 +1,51 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gaps between windows */
-static const unsigned int snap      = 32;       /* snap pixel */
-static const int scalepreview       = 4;        /* tag preview scaling */
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const int vertpad            = 9; /* vertical padding of bar */
-static const int sidepad            = 9; /* horizontal padding of bar */
-static const int user_bh            = 33;
-static const int horizpadbar        = 10;
-static const int vertpadbar         = 10;
-static const char *fonts[]          = { "Iosevka Nerd Font:size=9" };
-static const char dmenufont[]       = "Iosevka Nerd Font:size=9";
-static const char col_gray1[]       = "#171B20";
-static const char col_gray2[]       = "#1a1e24";
-static const char col_gray3[]       = "#485263";
-static const char col_gray4[]       = "#1a1e24";
-static const char col_cyan[]        = "#78DBA9";
-static const char col_borderbar[]   = "#171B20";
-static const char *colors[][3]      = {
+static const unsigned int borderpx       = 0;        /* border pixel of windows */
+static const unsigned int gappx          = 12;        /* gaps between windows */
+static const unsigned int snap           = 32;       /* snap pixel */
+static const unsigned int colorfultitle  = 0;
+static const unsigned int colorfultag    = 1;
+static const int scalepreview            = 4;        /* tag preview scaling */
+static const int showbar                 = 1;        /* 0 means no bar */
+static const int topbar                  = 1;        /* 0 means bottom bar */
+static const int vertpad                 = 13; /* vertical padding of bar */
+static const int sidepad                 = 13; /* horizontal padding of bar */
+static const int user_bh                 = 33;
+static const int horizpadbar             = 10;
+static const int vertpadbar              = 9;
+static const char *fonts[]               = { "Iosevka Nerd Font:size=10" };
+static const char dmenufont[]            = "Iosevka Nerd Font:size=10";
+static const char col_gray1[]            = "#101419";
+static const char col_gray2[]            = "#15191e";
+static const char col_gray3[]            = "#485263";
+static const char col_gray4[]            = "#15191e";
+static const char col_yellow[]           = "#f1cf8a";
+static const char col_green[]            = "#76b97f";
+static const char col_teal[]             = "#70a5eb";
+static const char col_magenta[]          = "#c68aee";
+static const char col_red[]              = "#e05f65";
+static const char col_blue[]             = "#70a5eb";
+static const char col_cyan[]             = "#74bee9";
+static const char col_borderbar[]        = "#101419";
+static const char *colors[][3]           = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+  [SchemeTag]        = { col_gray3,       col_gray1,    col_gray1 },
+  [SchemeTag1]       = { col_yellow,          col_gray1,  col_gray1 },
+	[SchemeTag2]       = { col_green,         col_gray1,  col_gray1 },
+  [SchemeTag3]       = { col_cyan,   col_gray1,  col_gray1 },
+  [SchemeTag4]       = { col_magenta,     col_gray1,  col_gray1 },
+  [SchemeTag5]       = { col_red,  col_gray1,  col_gray1 },
+	[SchemeTag6]       = { col_blue,     col_gray1,  col_gray1 },
+	[SchemeLayout]     = { col_green,       col_gray1,    col_gray1 },
+  [SchemeLaunchers]  = { col_blue, col_gray1, col_gray1 },
 };
+
+static const int tagschemes[] = { SchemeTag1, SchemeTag2, SchemeTag3,
+                                  SchemeTag4, SchemeTag5, SchemeTag6,
+                                  SchemeTag7, SchemeTag8, SchemeTag9 };
 
 /* tagging */
 static const char *tags[] = { "", "亂", "", "", "", "ﭮ" };
@@ -33,15 +54,6 @@ static const unsigned int ulinepad	= 4;	/* horizontal padding between the underl
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
-
-static const char *tagsel[][2] = {
-	{ "#f1cf8a", "#171B20" },
-	{ "#78DBA9", "#171B20" },
-	{ "#7ddac5", "#171B20" },
-	{ "#c68aee", "#171B20" },
-	{ "#e05f65", "#171B20" },
-	{ "#70a5eb", "#171B20" },
-};
 
 /* launcher commands (They must be NULL terminated) */
 static const char* apps[] = { "rofi", "-show", "drun", NULL };

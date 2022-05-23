@@ -61,7 +61,14 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel }; /* color schemes */
+enum { SchemeNorm, SchemeSel,
+       SchemeTag, SchemeTag1, SchemeTag2, SchemeTag3, 
+       SchemeTag4, SchemeTag5, SchemeTag6, SchemeTag7, 
+       SchemeTag8, SchemeTag9, SchemeLayout, SchemeLaunchers,
+       SchemeTitle, SchemeTitleFloat,
+       SchemeTitle1, SchemeTitle2, SchemeTitle3, 
+       SchemeTitle4, SchemeTitle5, SchemeTitle6, 
+       SchemeTitle7, SchemeTitle8, SchemeTitle9 }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
@@ -206,6 +213,10 @@ static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
 static void togglebar(const Arg *arg);
+/*
+static void togglecolorfultitle();
+static void togglecolorfultag();
+*/
 static void togglefloating(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
@@ -264,7 +275,6 @@ static int restart = 0;
 static int running = 1;
 static Cur *cursor[CurLast];
 static Clr **scheme, clrborder;
-static Clr **tagscheme;
 static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
@@ -298,6 +308,8 @@ struct Monitor {
 	unsigned int seltags;
 	unsigned int sellt;
 	unsigned int tagset[2];
+  unsigned int colorfultitle;
+  unsigned int colorfultag;
 	int previewshow;
 	int showbar;
 	int topbar;
@@ -711,6 +723,8 @@ createmon(void)
 	m->nmaster = nmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
+  m->colorfultag = colorfultag ? colorfultag : 0;
+  m->colorfultitle = colorfultitle ? colorfultitle : 0;
 	m->gappx = gappx;
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
@@ -919,19 +933,20 @@ drawbar(Monitor *m)
 	x = borderpx;
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(tags[i]);
-		drw_setscheme(drw, (m->tagset[m->seltags] & 1 << i ? tagscheme[i] : scheme[SchemeNorm]));
+    if (selmon->colorfultag) {
+      drw_setscheme(drw, scheme[occ & 1 << i ? (m->colorfultag ? tagschemes[i] : SchemeSel) : SchemeTag]);
+    } else {
+      drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeTag]);
+    }
     drw_text(drw, x, y, w, th, lrpad / 2, tags[i], urg & 1 << i);
 		if (ulineall || m->tagset[m->seltags] & 1 << i) /* if there are conflicts, just move these lines directly underneath both 'drw_setscheme' and 'drw_text' :) */
       drw_rect(drw, x + ulinepad, th - ulinestroke - ulinevoffset, w - (ulinepad * 2), ulinestroke, 1, 0);
-		if (occ & 1 << i)
-      drw_rect(drw, x + boxs, y+ boxs, boxw, boxw,
-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
-				urg & 1 << i);
 		x += w;
 	}
 	w = blw = TEXTW(m->ltsymbol);
-	drw_setscheme(drw, scheme[SchemeNorm]);
+	drw_setscheme(drw, scheme[SchemeLayout]);
 	x = drw_text(drw, x, y, w, th, lrpad / 2, m->ltsymbol, 0);
+  drw_setscheme(drw, scheme[SchemeLaunchers]);
 	
 	for (i = 0; i < LENGTH(launchers); i++)
 	{
@@ -1880,16 +1895,11 @@ setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
-  if (LENGTH(tags) > LENGTH(tagsel))
-    die("too few color schemes for the tags");
 	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
 	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], 3);
 	for (i = 0; i < LENGTH(colors); i++)
 		scheme[i] = drw_scm_create(drw, colors[i], 3);
   drw_clr_create(drw, &clrborder, col_borderbar);
-  tagscheme = ecalloc(LENGTH(tagsel), sizeof(Clr *));
-  for (i = 0; i < LENGTH(tagsel); i++)
-    tagscheme[i] = drw_scm_create(drw, tagsel[i], 2);
 	/* init bars */
 	updatebars();
 	updatestatus();
@@ -2093,6 +2103,22 @@ togglebar(const Arg *arg)
 	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + sp, selmon->by + vp, selmon->ww - 2 * sp, bh);
 	arrange(selmon);
 }
+
+/*
+void
+togglecolorfultitle()
+{
+        selmon->colorfultitle = !selmon->colorfultitle;
+        drawbar(selmon);
+}
+
+void
+togglecolorfultag()
+{
+        selmon->colorfultag = !selmon->colorfultag;
+        drawbar(selmon);
+}
+*/
 
 void
 togglefloating(const Arg *arg)

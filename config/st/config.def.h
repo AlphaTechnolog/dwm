@@ -5,9 +5,9 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "JetBrainsMono Nerd Font :pixelsize=12:antialias=true:autohint=true";
-static char *font2[] = { "JetBrainsMono Nerd Font :pixelsize=12:antialias=true:autohint=true" };
-static int borderpx = 12;
+static char *font = "Iosevka Nerd Font :pixelsize=16:antialias=true:autohint=true";
+static char *font2[] = { "Iosevka Nerd Font :pixelsize=16:antialias=true:autohint=true" };
+static int borderpx = 15;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -165,7 +165,7 @@ unsigned int defaultrcs = 257;
  * 7: Blinking st cursor
  * 8: Steady st cursor
  */
-static unsigned int cursorshape = 6;
+static unsigned int cursorshape = 1;
 
 /*
  * Default columns and rows numbers

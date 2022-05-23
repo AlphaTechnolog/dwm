@@ -2,18 +2,18 @@
 
 # colors
 fg=#b6beca
-bg=#171B20
-contrast=#1a1e24
-lighter=#21262e
+bg=#101419
+contrast=#15191e
+lighter=#1a1e23
 
 black=#242931
 red=#e05f65
-green=#78DBA9
+green=#76b97f
 yellow=#f1cf8a
 blue=#70a5eb
 magenta="#c68aee"
 cyan="#74bee9"
-white="#b6beca"
+white="#dee1e6"
 
 # src
 percentage () {

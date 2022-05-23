@@ -12,6 +12,8 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 - Iosevka Nerd Font (for dashboard with eww)
 - MaterialDesign Font (download from [this](https://github.com/Templarian/MaterialDesign-Font/))
 - eww (for dashboard)
+- fish (as shell)
+- starship (for make fish prompt)
 - rofi (for select apps)
 - dunst (for notifications)
 - picom (compositor)
@@ -43,7 +45,7 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 
 ### St
 
-The st config is based in [siduck's st config](https://github.com/siduck/st)
+The st config is based in [siduck's st build](https://github.com/siduck/st)
 
 ## Installation
 
@@ -64,6 +66,12 @@ cd dwm
 cp -r ./config/* ~/.config
 cp -r ./bin/* ~/.local/bin
 cp -r ./home/* ~/
+```
+
+Use `xrdb` to merge `colors`
+
+```sh
+xrdb merge ~/.Xresources
 ```
 
 3. Create the launcher
