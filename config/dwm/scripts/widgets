@@ -86,7 +86,7 @@ get_brightness () {
 
 get_title () {
   # using "  " to get more margin in the bar (problems at patch, and idk how to really fix it lmao)
-  echo "$(get_ram)$(get_brightness)$(get_volume)$(get_vpn)$(get_network)$(get_date) "
+  echo "$(get_ram)$(get_brightness)$(get_volume)$(get_vpn)$(get_network)$(get_date)   "
 }
 
 while :; do
