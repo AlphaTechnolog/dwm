@@ -82,7 +82,7 @@ test -f config.h && rm config.h
 sudo make clean install
 ```
 
-3. Compile st
+4. Compile st
 
 ```sh
 cd ~/.config/st
