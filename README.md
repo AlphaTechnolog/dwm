@@ -74,7 +74,23 @@ Use `xrdb` to merge `colors`
 xrdb merge ~/.Xresources
 ```
 
-3. Create the launcher
+3. Compile dwm
+
+```sh
+cd ~/.config/dwm/src
+test -f config.h && rm config.h
+sudo make clean install
+```
+
+3. Compile st
+
+```sh
+cd ~/.config/st
+test -f config.h && rm config.h
+sudo make clean install
+```
+
+5. Create the launcher
 
 If u're using a login manager like sddm or lightdm u can copy the .desktop to `/usr/share/xsessions` and replace in the file
 `/usr/share/xsessions/dwm.desktop` the name `gabriel` to ur username.
@@ -94,22 +110,6 @@ Then startx:
 
 ```sh
 startx
-```
-
-4. Compile dwm
-
-```sh
-cd ~/.config/dwm/src
-test -f config.h && rm config.h
-sudo make clean install
-```
-
-5. Compile st
-
-```sh
-cd ~/.config/st
-test -f config.h && rm config.h
-sudo make clean install
 ```
 
 ## Enjoy!
