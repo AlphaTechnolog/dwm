@@ -34,7 +34,7 @@ percentage () {
 }
 
 get_network_icon () {
-  [ $(cat /sys/class/net/w*/operstate) = down ] && echo   && exit
+  [ $(cat /sys/class/net/w*/operstate) = down ] && echo 睊 && exit
   echo 
 }
 
