@@ -13,6 +13,7 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 - MaterialDesign Font (download from [this](https://github.com/Templarian/MaterialDesign-Font/))
 - eww (for dashboard)
 - fish (as shell)
+- feh
 - starship (for make fish prompt)
 - rofi (for select apps)
 - dunst (for notifications)
