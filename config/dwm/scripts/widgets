@@ -42,9 +42,9 @@ get_network () {
   id=$(iwgetid -r || echo "Disconnected")
   icon=$(get_network_icon)
   if [[ $id == "Disconnected" ]]; then
-    printf "^b$red^^c$bg^ $icon ^b$bg^^c$red^  $id  ^b$bg^"
+    printf "^b$red^^c$bg^ $icon  ^b$bg^^c$red^  $id  ^b$bg^"
   else
-    printf "^b$blue^^c$bg^ $icon ^b$bg^^c$cyan^  $id  ^b$bg^"
+    printf "^b$blue^^c$bg^ $icon  ^b$bg^^c$cyan^  $id  ^b$bg^"
   fi
 }
 
@@ -58,35 +58,35 @@ get_volume () {
   icon=$(get_volume_icon $vol)
   vol=$(echo $vol | tr "%" " ")
   vol=$(echo "${vol% }")
-  printf "^b$green^^c$bg^ $icon ^c$green^^b$bg^  $vol%%  "
+  printf "^b$green^^c$bg^ $icon  ^c$green^^b$bg^  $vol%%  "
 }
 
 get_vpn () {
   ip=$(ifconfig tun0 2>/dev/null | grep inet | head -n 1 | awk '{print $2}')
   if [[ $ip == "" ]]; then
-    echo "^c$magenta^^b$lighter^  ^b$bg^^c$magenta^  Disconnected  ^b$bg^^c$fg^"
+    echo "^c$magenta^^b$lighter^   ^b$bg^^c$magenta^  Disconnected  ^b$bg^^c$fg^"
   else
-    echo "^c$cyan^^b$lighter^  ^b$bg^^c$cyan^  $ip  ^b$bg^^c$fg^"
+    echo "^c$cyan^^b$lighter^   ^b$bg^^c$cyan^  $ip  ^b$bg^^c$fg^"
   fi
 }
 
 get_date () {
-  printf "^c$magenta^^b$lighter^  ^b$bg^  $(date +'%R')  ^c$fg^^b$bg^"
+  printf "^c$magenta^^b$lighter^   ^b$bg^  $(date +'%R')  ^c$fg^^b$bg^"
 }
 
 get_ram () {
-  printf "^b$lighter^^c$red^  ^b$bg^^c$red^  %.0f%%  ^b$bg^^c$fg^\n" $(free -m | grep Mem | awk '{print ($3/$2)*100}')
+  printf "^b$lighter^^c$red^   ^b$bg^^c$red^  %.0f%%  ^b$bg^^c$fg^\n" $(free -m | grep Mem | awk '{print ($3/$2)*100}')
 }
 
 get_brightness () {
   br=$(light -G | tr '.' ' ' | awk '{print $1}')
   icon=$(percentage "$br" "" "" "" "")
-  printf "^b$yellow^^c$bg^ $icon ^b$bg^^c$yellow^  $br%%  ^c$fg^^b$bg^"
+  printf "^c$yellow^ $icon ^b$bg^^c$yellow^ $br%%  ^c$fg^^b$bg^"
 }
 
 get_title () {
   # using "  " to get more margin in the bar (problems at patch, and idk how to really fix it lmao)
-  echo "$(get_ram)$(get_brightness)$(get_volume)$(get_vpn)$(get_network)$(get_date)   "
+  echo "$(get_ram)$(get_brightness)$(get_vpn)$(get_network)$(get_date)   "
 }
 
 while :; do
