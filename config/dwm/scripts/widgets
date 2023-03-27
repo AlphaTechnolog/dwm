@@ -91,6 +91,6 @@ get_title () {
 
 while :; do
   xsetroot -name "$(get_title)"
-  sleep 0.5
+  sleep 1
 done &
 
