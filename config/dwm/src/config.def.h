@@ -104,7 +104,7 @@ static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[] = { "firefox", NULL };
 static const char *dashboardcmd[] = { "eww", "open", "--toggle", "system-tray", NULL };
-static const char *xcolorpick[] = { "/home/gabriel/.local/bin/xcolor-pick", NULL };
+static const char *xcolorpick[] = { "$HOME/.local/bin/xcolor-pick", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
