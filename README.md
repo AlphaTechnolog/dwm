@@ -23,6 +23,8 @@ This is my custom dwm build which not uses dwmblocks or something similar for ba
 - bat (cat replacement)
 - alsa-utils (for amixer)
 - wireless\_tools (iwgetid)
+- bspwm (used for handling workspaces)
+- playerctl (used for media playback controls)
 
 ## About this
 
